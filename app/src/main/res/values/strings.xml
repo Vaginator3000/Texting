@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Texting</string>
+    <string name="txt_empty">Описание не может быть пустым!</string>
+    <string name="click_date">Выберите дату</string>
+</resources>
