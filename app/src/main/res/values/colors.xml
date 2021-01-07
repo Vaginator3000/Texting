@@ -3,8 +3,9 @@
     <color name="colorPrimary">#D56C00</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="first_bcg">#128CDD</color>
-    <color name="first_bcg2">#F17A00</color>
+    <color name="first_bcg">#F17A00</color>
+    <color name="first_bcg_custom">#F17A00</color>
     <color name="second_bcg">#fffdd0</color>
+    <color name="second_bcg_custom">#fffdd0</color>
     <color name="font_color">#000</color>
 </resources>

@@ -7,7 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-public class MyDbHelper extends SQLiteOpenHelper {
+public class MyDbHelper extends SQLiteOpenHelper{
 
     public MyDbHelper(@Nullable Context context) {
         super(context, MyConstants.DB_NAME, null, MyConstants.DB_VERSION);

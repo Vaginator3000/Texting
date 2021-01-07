@@ -33,8 +33,6 @@ public class dbManager {
     }
 
     public List<containItem> readFromDb() {
-        List<String> titleList = new ArrayList<>();
-        List<String> dateList = new ArrayList<>();
         List<containItem> itemList = new ArrayList<>();
         Cursor cursor = db.query(MyConstants.TABLE_NAME, null, null,
                 null, null, null, null);
@@ -43,15 +41,51 @@ public class dbManager {
             containItem item;
             String title = cursor.getString(cursor.getColumnIndex(MyConstants.TITLE));
             String date = cursor.getString(cursor.getColumnIndex(MyConstants.DATE));
+            String disc = cursor.getString(cursor.getColumnIndex(MyConstants.DISC));
+            int id = cursor.getInt(cursor.getColumnIndex(MyConstants._ID));
 
-            if (date.equals("")) item = new containItem(title);
-            else item = new containItem(title, date);
+            /*if (date.equals("")) item = new containItem(id,title);
+            else item = new containItem(id,title, date, disc);*/
+            item = new containItem(id,title, date, disc);
             itemList.add(item);
         }
 
         cursor.close();
         return itemList;
     }
+
+
+//    public List<containItem> deleteFromDb (List<containItem> itemList, int ind) {
+//        itemList.remove(ind);
+//        return itemList;
+//    }
+
+    public void deleteFromDb(String id) {
+        String item = MyConstants._ID + "=" + id;
+        db.delete(MyConstants.TABLE_NAME, item, null);
+    }
+
+//    public List<containItem> deleteFromDb (int ind) {
+//        List<containItem> itemList = new ArrayList<>();
+//        Cursor cursor = db.query(MyConstants.TABLE_NAME, null, null,
+//                null, null, null, null);
+//
+//        while (cursor.moveToNext()) {
+//            if (cursor.getPosition() != ind) {
+//                containItem item;
+//                String title = cursor.getString(cursor.getColumnIndex(MyConstants.TITLE));
+//                String date = cursor.getString(cursor.getColumnIndex(MyConstants.DATE));
+//                String disc = cursor.getString(cursor.getColumnIndex(MyConstants.DISC));
+//
+//                if (date.equals("")) item = new containItem(title); //Если дата не указана, то конструктор без даты
+//                else item = new containItem(title, date, disc);
+//
+//                itemList.add(item);
+//            }
+//        }
+//        cursor.close();
+//        return itemList;
+//    }
 
     public void closeDb() {
         myDbHelper.close();

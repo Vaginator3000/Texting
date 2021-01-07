@@ -1,18 +1,28 @@
 package com.example.texting.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.texting.EditActivity;
 import com.example.texting.R;
+import com.example.texting.db.MyConstants;
 import com.example.texting.db.containItem;
+import com.example.texting.db.dbManager;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +39,18 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_list_layout, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, context, mainArray);
     }
+
+//    //Сравниваем, дата в заметке позже или раньше сегодняшней
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public boolean CompareDate() {
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        LocalDate localDate = LocalDate.now();
+//    //    System.out.println(dtf.format(localDate));
+//        Log.d("MyLog", dtf.format(localDate));
+//        return true;
+//    }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
@@ -41,27 +61,50 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mainArray.size();
+        int size = mainArray.size();
+        return size;
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView tvTitle;
         private TextView tvDate;
-        private LinearLayout lLayout;
+    //    private LinearLayout lLayout;
+        Context context;
+        private List<containItem> mainArray;
 
-        public MyViewHolder(@NonNull View itemView) {
+
+        public MyViewHolder(@NonNull View itemView, Context context,List<containItem> mainArray) {
             super(itemView);
-            lLayout = itemView.findViewById(R.id.lLayout);
+            this.context = context;
+            this.mainArray = mainArray;
+     //       lLayout = itemView.findViewById(R.id.lLayout);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDate = itemView.findViewById(R.id.tvDate);
+            itemView.setOnClickListener(this);
         }
 
         public void setData(String title, String date) { tvTitle.setText(title); tvDate.setText(date); }
+
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(context, EditActivity.class);
+            i.putExtra(MyConstants.CONTAIN_ITEM_INTENT, mainArray.get(getAdapterPosition()));
+            i.putExtra(MyConstants.EDIT_STATE, false);
+            context.startActivity(i);
+
+        }
     }
 
     public void updateAdapter(List<containItem> newList) {
         mainArray.clear();
         mainArray.addAll(newList);
         notifyDataSetChanged();
+    }
+
+    public void delItem(int position, dbManager dbM) {
+        dbM.deleteFromDb(String.valueOf(mainArray.get(position).getID()));
+        mainArray.remove(position);
+        notifyItemRangeChanged(0,mainArray.size());
+        notifyItemRemoved(position);
     }
 }
