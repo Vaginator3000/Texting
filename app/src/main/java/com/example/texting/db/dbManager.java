@@ -17,6 +17,7 @@ public class dbManager {
     public dbManager(Context context) {
         this.context = context;
         myDbHelper = new MyDbHelper(context);
+
     }
 
     public void openDb() {
@@ -44,8 +45,7 @@ public class dbManager {
             String disc = cursor.getString(cursor.getColumnIndex(MyConstants.DISC));
             int id = cursor.getInt(cursor.getColumnIndex(MyConstants._ID));
 
-            /*if (date.equals("")) item = new containItem(id,title);
-            else item = new containItem(id,title, date, disc);*/
+            /*else item = new containItem(id,title, date, disc);*/
             item = new containItem(id,title, date, disc);
             itemList.add(item);
         }

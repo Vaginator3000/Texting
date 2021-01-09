@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Текст"
+        android:id="@+id/TextTitle">
+    </PreferenceCategory>
+    <ListPreference
+        android:id="@+id/select_font_size"
+        android:defaultValue="Средний"
+        android:entries="@array/font_size_arr"
+        android:entryValues="@array/font_size_arr"
+        android:key="font_size"
+        android:summary=""
+        android:title="Размер шрифта" />
+    <com.jaredrummler.android.colorpicker.ColorPreference
+        android:id="@+id/colorPicker2"
+        android:key="color_picker2"
+        android:defaultValue="@color/font_color"
+        android:title="Цвет шрифта" />
+
+    <PreferenceCategory android:title="Дизайн"
+        android:id="@+id/DesignTitle">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="def_colors"
+            android:title="Использовать свой цвет" />
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:id="@+id/colorPicker1"
+            android:key="color_picker1"
+            android:dependency="def_colors"
+            android:defaultValue="@color/first_bcg"
+            android:title="Выберите основной цвет" />
+        <!--<com.jaredrummler.android.colorpicker.ColorPreference
+            android:key="color_picker2"
+            android:dependency="def_colors"
+            android:defaultValue="@color/second_bcg"
+            android:title="Выберите дополнительный цвет" />-->
+    </PreferenceCategory>
+</PreferenceScreen>

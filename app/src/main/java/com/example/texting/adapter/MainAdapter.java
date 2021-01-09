@@ -2,17 +2,16 @@ package com.example.texting.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.texting.EditActivity;
@@ -21,8 +20,6 @@ import com.example.texting.db.MyConstants;
 import com.example.texting.db.containItem;
 import com.example.texting.db.dbManager;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,8 +58,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        int size = mainArray.size();
-        return size;
+        return mainArray.size();
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -71,6 +67,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     //    private LinearLayout lLayout;
         Context context;
         private List<containItem> mainArray;
+        private SharedPreferences pref;
 
 
         public MyViewHolder(@NonNull View itemView, Context context,List<containItem> mainArray) {
@@ -81,6 +78,22 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDate = itemView.findViewById(R.id.tvDate);
             itemView.setOnClickListener(this);
+
+            setTextColor();
+        }
+
+        public void setTextColor() {
+            //Устанавливаем цвет текста
+            pref = PreferenceManager.getDefaultSharedPreferences(context);
+            try {
+                int color = pref.getInt("color_picker2", Color.BLACK);
+                tvDate.setTextColor(color);
+                tvTitle.setTextColor(color);
+            } catch (Exception e) {
+                Log.d("MyLog", "MainAdapter - setTextColor");
+                Log.d("MyLog", e.toString());
+            }
+
         }
 
         public void setData(String title, String date) { tvTitle.setText(title); tvDate.setText(date); }

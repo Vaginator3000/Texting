@@ -1,5 +1,15 @@
 package com.example.texting;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,18 +18,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-
 import com.example.texting.adapter.MainAdapter;
 import com.example.texting.db.dbManager;
 import com.example.texting.settings.SettingsActivity;
@@ -27,35 +25,58 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
     private dbManager dbManager;
-    private EditText edTitle, edDisc, edDate;
+ //   private EditText edTitle, edDisc, edDate;
     private RecyclerView rv;
     private MainAdapter mAdapter;
     private SharedPreferences pref;
 
+    private ActionBar aBar;
+   // private AlarmReceiver alarm;
     //    edDate.setBackgroundColor(getResources().getColor(R.color.first_bcg));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        init();
 
-        ActionBar aBar = getSupportActionBar();
+        aBar = getSupportActionBar();
         if (aBar != null) aBar.setDisplayOptions(aBar.getDisplayOptions());
+
+        init();
     }
 
     private void init() {
         dbManager = new dbManager(this);
-        edTitle = findViewById(R.id.edTitle);
-        edDate = findViewById(R.id.edDate);
-        edDisc = findViewById(R.id.edDisc);
+//        edTitle = findViewById(R.id.edTitle);
+//        edDate = findViewById(R.id.edDate);
+//        edDisc = findViewById(R.id.edDisc);
         rv = findViewById(R.id.rcView);
         mAdapter = new MainAdapter(this);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(mAdapter);
 
+      //  alarm=new AlarmReceiver();
+
         new ItemTouchHelper(itemTHCallback).attachToRecyclerView(rv);
 
+        setPrefs();
+
+     //   setAlarms();
+    }
+
+//    public void setAlarms() {
+//
+//        Context context= this.getApplicationContext();
+//        if(alarm!=null){
+//            alarm.setOnetimeTimer(context);
+//        }else{
+//            Log.d("MyLog", "жопа");
+//          //  Toast.makeText(context,"Alarm is null", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+    public void setPrefs() {
+        //Устанавливаем цвета окон (цвет текста устанавливается в MainAdapter)
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         ConstraintLayout cL; //Меняем цвет у ConstraintLayout
         cL = findViewById(R.id.constL);
@@ -67,12 +88,17 @@ public class MainActivity extends AppCompatActivity {
             int color2 = pref.getInt("color_picker2", Color.WHITE);
             //   int color2 = pref.getInt("color_picker2", Color.parseColor("@color/second_bcg"));
             cL.setBackgroundColor(color1);
-            abtn.setBackgroundTintList(ColorStateList.valueOf(color1));
+            //    abtn.setBackgroundTintList(ColorStateList.valueOf(color1));
+            abtn.setColorFilter(color1);
+
+            if (aBar != null) aBar.setBackgroundDrawable(new ColorDrawable(color1));
         }
         else {
             int color = getResources().getColor(R.color.first_bcg);
             cL.setBackgroundColor(color);
-            abtn.setBackgroundTintList(ColorStateList.valueOf(color));
+        //    abtn.setBackgroundTintList(ColorStateList.valueOf(color));
+            abtn.setBackgroundColor(color);
+         //   aBar.setBackgroundDrawable(new ColorDrawable(color));
         }
     }
 
@@ -126,13 +152,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void onClickRView(View view) {
-    }
-
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         dbManager.closeDb();
+        super.onDestroy();
     }
 
 }

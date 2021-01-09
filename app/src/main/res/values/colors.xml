@@ -5,7 +5,7 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="first_bcg">#F17A00</color>
     <color name="first_bcg_custom">#F17A00</color>
-    <color name="second_bcg">#fffdd0</color>
+    <color name="second_bcg">#FFFFFF</color>
     <color name="second_bcg_custom">#fffdd0</color>
     <color name="font_color">#000</color>
 </resources>
