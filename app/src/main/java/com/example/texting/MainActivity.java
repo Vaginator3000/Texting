@@ -6,9 +6,11 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rv;
     private MainAdapter mAdapter;
     private SharedPreferences pref;
+    private SearchView sView;
 
     private ActionBar aBar;
    // private AlarmReceiver alarm;
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         dbManager = new dbManager(this);
+        dbManager.openDb();
 //        edTitle = findViewById(R.id.edTitle);
 //        edDate = findViewById(R.id.edDate);
 //        edDisc = findViewById(R.id.edDisc);
@@ -55,13 +59,42 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(mAdapter);
 
+        sView = findViewById(R.id.searchView);
       //  alarm=new AlarmReceiver();
+        initSearchView();
 
         new ItemTouchHelper(itemTHCallback).attachToRecyclerView(rv);
+
+
+        // Get the intent, verify the action and get the query
+//        Intent intent = getIntent();
+//        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+//            String query = intent.getStringExtra(SearchManager.QUERY);
+//            doMySearch(query);
+//        }
 
         setPrefs();
 
      //   setAlarms();
+    }
+
+    public void initSearchView() {
+        SearchView.OnQueryTextListener onQTL = new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        Log.d("MyLog", "btn - " + query);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        //Открываем и обновляем бд
+                        mAdapter.updateAdapter(dbManager.readFromDb(newText));
+                        return true;
+                    }
+                };
+
+        sView.setOnQueryTextListener(onQTL);
     }
 
 //    public void setAlarms() {
@@ -106,8 +139,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //Открываем и обновляем бд
-        dbManager.openDb();
-        mAdapter.updateAdapter(dbManager.readFromDb());
+      //  dbManager.openDb();
+        mAdapter.updateAdapter(dbManager.readFromDb(""));
     }
 
     @Override
@@ -138,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Свайп дял удаления
-    final ItemTouchHelper.SimpleCallback itemTHCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+    final ItemTouchHelper.SimpleCallback itemTHCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;

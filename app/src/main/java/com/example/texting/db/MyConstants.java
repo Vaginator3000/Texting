@@ -2,7 +2,7 @@ package com.example.texting.db;
 
 public class MyConstants {
     public static final String CONTAIN_ITEM_INTENT = "contain_item_intent"; //ключ
-    public static final String EDIT_STATE = "edit_state"; //true - для редакитировани, false - нет
+    public static final String EDIT_STATE = "edit_state"; //true - для редакитировани, false - если новая заметка
     public static final String TABLE_NAME = "my_table";
     public static final String _ID = "_id";
     public static final String TITLE = "title";

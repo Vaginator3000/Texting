@@ -36,6 +36,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private Context context;
     private boolean isEditState = true;
     private SharedPreferences pref;
+    private int currentID;
 
    // private AlarmReceiver alarm;
 
@@ -147,6 +148,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 edTitle.setText(item.getTitleList());
                 edDate.setText(item.getDateList());
                 edDisc.setText(item.getDiscList());
+                currentID = item.getID();
 
                 date_for_notification = dateFormat(edDate.getText().toString());
             }
@@ -167,6 +169,10 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             Log.d("MyLog", "date_for_notification - " + date_for_notification);
         }
 
+        saveNote();
+    }
+
+    public void saveNote() {
         //Вносим данные в бд
         String title = edTitle.getText().toString();
         String date = edDate.getText().toString();
@@ -174,11 +180,15 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         if (disc.equals("")) {
             Toast.makeText(this, R.string.txt_empty, Toast.LENGTH_SHORT).show();
         } else {
-            dbManager.insertToDb(title, date, disc);
+            try {
+                //    if (isEditState) dbManager.replaceInDb(String.valueOf(currentID),title, date, disc);
+                //    else dbManager.insertToDb(title, date, disc);
+                dbManager.insertToDb(title, date, disc);
+            } catch (Exception e) {
+                Log.d("MyLog", e.toString());
+            }
             finish();
         }
-
-
     }
 
     public void onClickCal(View view) {

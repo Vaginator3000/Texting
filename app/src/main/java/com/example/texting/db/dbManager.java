@@ -33,10 +33,27 @@ public class dbManager {
         db.insert(MyConstants.TABLE_NAME, null, cv);
     }
 
-    public List<containItem> readFromDb() {
+    public void replaceInDb(String id, String title, String date, String disc) {
+        ContentValues cv = new ContentValues();
+        cv.put(MyConstants._ID, id);
+        cv.put(MyConstants.TITLE, title);
+        cv.put(MyConstants.DATE, date);
+        cv.put(MyConstants.DISC, disc);
+
+      //  db.insert(MyConstants.TABLE_NAME, null, cv);
+        db.replace(MyConstants.TABLE_NAME, null, cv);
+    }
+
+    public List<containItem> readFromDb(String searchText) {
         List<containItem> itemList = new ArrayList<>();
-        Cursor cursor = db.query(MyConstants.TABLE_NAME, null, null,
-                null, null, null, null);
+
+      //  List<String> str = new ArrayList<>();
+      //  str.set(0, searchText);
+
+        String[] str = new String[] { "%" + searchText + "%"};
+        String selection = MyConstants.DISC + " like ?";
+        Cursor cursor = db.query(MyConstants.TABLE_NAME, null, selection,
+             str, null, null, null);
 
         while (cursor.moveToNext()) {
             containItem item;
