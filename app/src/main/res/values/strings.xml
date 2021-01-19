@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Texting</string>
+    <string name="app_name">Заметки</string>
+    <string name="app_version">1.1</string>
     <string name="txt_empty">Описание не может быть пустым!</string>
     <string name="click_date">Выберите дату</string>
     <string name="settings">Настройки</string>

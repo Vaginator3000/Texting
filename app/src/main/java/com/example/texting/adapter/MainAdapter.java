@@ -105,7 +105,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             i.putExtra(MyConstants.EDIT_STATE, false);
             context.startActivity(i);
 
-
         }
     }
 

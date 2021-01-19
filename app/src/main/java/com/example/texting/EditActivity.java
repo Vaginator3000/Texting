@@ -38,8 +38,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private SharedPreferences pref;
     private int currentID;
 
-   // private AlarmReceiver alarm;
-
     private String date_for_notification = ""; //Сохранить дату в другом формате для уведомлений
 
     @Override
@@ -68,25 +66,22 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     public void setPref() {
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        //Размер шрифта
+        //Размер шрифта(у даты не меняется)
         String font = pref.getString("font_size", "Средний");
         switch (font) {
             case "Мелкий": {
                 edDisc.setTextSize(14);
                 edTitle.setTextSize(14);
-                //    edDate.setTextSize(14);
                 break;
             }
             case "Средний": {
                 edDisc.setTextSize(18);
                 edTitle.setTextSize(18);
-                //    edDate.setTextSize(18);
                 break;
             }
             case "Крупный": {
                 edDisc.setTextSize(24);
                 edTitle.setTextSize(24);
-                //   edDate.setTextSize(24);
                 break;
             }
         }
@@ -107,9 +102,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         abtn = findViewById(R.id.floatingActionButton2);
         if (pref.getBoolean("def_colors", false)) {
             int color1 = pref.getInt("color_picker1", Color.GREEN);
-            //    int color1 = pref.getInt("color_picker1", Color.parseColor("@color/first_bcg"));
             int color2 = pref.getInt("color_picker2", Color.WHITE);
-            //   int color2 = pref.getInt("color_picker2", Color.parseColor("@color/second_bcg"));
             cL.setBackgroundColor(color1);
             ib2.setBackgroundColor(color1);
             ib1.setBackgroundColor(color1);
@@ -181,9 +174,10 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             Toast.makeText(this, R.string.txt_empty, Toast.LENGTH_SHORT).show();
         } else {
             try {
-                //    if (isEditState) dbManager.replaceInDb(String.valueOf(currentID),title, date, disc);
-                //    else dbManager.insertToDb(title, date, disc);
-                dbManager.insertToDb(title, date, disc);
+                    //Если создается новая - insert, если редактирование - replace
+                    //Можно было просто replace оставить, но заметки тогда в начало вставляются
+                    if (isEditState) dbManager.insertToDb(title, date, disc);
+                    else dbManager.replaceInDb(String.valueOf(currentID),title, date, disc);
             } catch (Exception e) {
                 Log.d("MyLog", e.toString());
             }

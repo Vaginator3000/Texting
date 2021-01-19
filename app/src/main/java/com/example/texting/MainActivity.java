@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -158,7 +159,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             case R.id.action_about: {
-                int f;
+                Toast.makeText(this, getResources().getString(R.string.app_name)
+                        + "\nВерсия " + getResources().getString(R.string.app_version), Toast.LENGTH_SHORT).show();
                 break;
             }
         }
